@@ -1,0 +1,13 @@
+zone "asu.ia.pw.edu.pl" {
+	type master;
+	file "/etc/bind/db.asu";
+	allow-transfer { 192.168.4.20; };
+	also-notify { 192.168.4.20; };
+};
+
+zone "4.168.192.in-addr.arpa" {
+	type master;
+	file "/etc/bind/db.rev";
+	allow-transfer { 192.168.4.20; };
+	also-notify { 192.168.4.20; };
+};

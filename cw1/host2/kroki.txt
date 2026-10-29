@@ -1,0 +1,35 @@
+cw1 host2
+
+pobranie
+dhclient eth1
+cd /root
+U=https://macius714.github.io/cw1/host2
+curl -O $U/interfaces
+curl -O $U/hosts
+apt-get install traceroute ftp
+
+etap 1 (po routerze)
+ip addr add 192.168.2.20/24 dev eth0
+ip link set eth0 up
+ip route add 192.168.1.0/24 via 192.168.2.1
+ping -c3 192.168.1.10
+traceroute -n 192.168.1.10   (pierwszy skok 192.168.2.1)
+ping -c3 194.29.160.35
+ping -c3 mion.elka.pw.edu.pl
+
+etap 2
+cp interfaces /etc/network/
+cp hosts /etc/
+reboot
+po restarcie:
+ip a
+ip route
+ping -c3 host1
+traceroute host1
+
+etap 3 (po host1 etap 3)
+ftp host1
+  login: user  haslo: user
+  put /etc/hostname test.txt
+  ls
+  bye

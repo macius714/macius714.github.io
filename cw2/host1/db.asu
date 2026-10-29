@@ -1,0 +1,11 @@
+$TTL	3600
+@	IN	SOA	host1.asu.ia.pw.edu.pl. root.asu.ia.pw.edu.pl. (
+			1	; serial
+			3600	; refresh
+			600	; retry
+			86400	; expire
+			3600 )	; minimum
+@	IN	NS	host1.asu.ia.pw.edu.pl.
+@	IN	NS	host2.asu.ia.pw.edu.pl.
+host1	IN	A	192.168.4.10
+host2	IN	A	192.168.4.20

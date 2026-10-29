@@ -1,0 +1,16 @@
+cw3 komputer fizyczny
+
+etap 1
+mkdir ~/cups
+chmod 777 ~/cups
+virtualbox: host1 -> ustawienia -> foldery wspoldzielone -> +
+  sciezka: ~/cups
+  nazwa: cups
+  zaznaczyc: stale (make permanent)
+albo przy wylaczonej host1:
+VBoxManage sharedfolder add "Host1" --name cups --hostpath ~/cups
+
+etap 2
+po wydruku strony testowej:
+ls -l ~/cups
+evince ~/cups/*.pdf

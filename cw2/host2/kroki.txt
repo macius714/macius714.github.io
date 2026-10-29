@@ -1,0 +1,39 @@
+cw2 host2
+
+host1 = 192.168.4.10, jak inne -> zmienic w head, named.conf.local, fstab
+
+pobranie (wszystko na poczatku)
+cd /root
+U=https://macius714.github.io/cw2/host2
+curl -O $U/head
+curl -O $U/tail
+curl -O $U/named.conf.local
+curl -O $U/fstab
+apt-get install bind9 dnsutils nfs-common
+
+etap 1 (po host1 etap 1)
+cp head tail /etc/resolvconf/resolv.conf.d/
+resolvconf -u
+cat /etc/resolv.conf
+  pierwszy nameserver 192.168.4.10, ostatni search asu.ia.pw.edu.pl
+nslookup host1
+nslookup host2
+nslookup 192.168.4.10
+nslookup 192.168.4.20
+ping -c3 host1
+
+etap 2
+cp named.conf.local /etc/bind/
+named-checkconf
+service bind9 restart
+ls -l /var/cache/bind   (maja byc db.asu i db.rev)
+nslookup host1 localhost
+nslookup 192.168.4.10 localhost
+
+etap 3 (po host1 etap 3)
+mkdir /host1
+cat fstab >> /etc/fstab
+mount -a
+ls -l /host1
+reboot
+po restarcie: ls -l /host1

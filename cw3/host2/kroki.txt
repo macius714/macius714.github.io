@@ -1,0 +1,11 @@
+cw3 host2
+
+etap 3 (po restarcie cups na host1, odczekac chwile)
+lpstat -a   (ma byc drukarka z host1)
+lp -d PDF /etc/hostname   (nazwa drukarki taka jak w lpstat -a)
+na host1: ls -l /CUPS
+
+jak nie widac drukarki:
+apt-get install cups-browsed
+service cups-browsed restart
+albo: echo "ServerName <ip host1>" > /etc/cups/client.conf

@@ -1,0 +1,29 @@
+cw4 host2
+
+ip host1: na host1 ip -4 a
+
+etap 2 (po host1 etap 1)
+apt-get install libnss-ldap libpam-ldap ldap-utils nscd
+ldapsearch -x -H ldap://<ip host1> -b dc=asu,dc=ia,dc=pw,dc=edu,dc=pl uid=jan
+odpowiedzi:
+  LDAP server URI: ldap://<ip host1>/   (skasowac ldapi:///)
+  search base: dc=asu,dc=ia,dc=pw,dc=edu,dc=pl
+  LDAP version: 3
+  Make local root Database admin: Yes
+  Does the LDAP database require login: No
+  LDAP account for root: cn=admin,dc=asu,dc=ia,dc=pw,dc=edu,dc=pl
+  LDAP root account password: admin
+  reszta enter
+jak nie pytalo (pakiety juz byly): dpkg-reconfigure ldap-auth-config
+auth-client-config -t nss -p lac_ldap
+pam-auth-update   (zaznaczone LDAP Authentication i Unix authentication)
+service nscd restart
+getent passwd jan   -> jan:x:5000:5000:jan:/home/users/jan:/bin/bash
+ls -ld /home/users/jan
+su - user
+su - jan   (haslo jan)
+id
+reboot, zalogowac sie jako jan / jan
+
+jak nie ma auth-client-config:
+nano /etc/nsswitch.conf -> dopisac ldap w passwd, group, shadow

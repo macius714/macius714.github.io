@@ -1,0 +1,24 @@
+dn: ou=People,dc=asu,dc=ia,dc=pw,dc=edu,dc=pl
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Groups,dc=asu,dc=ia,dc=pw,dc=edu,dc=pl
+objectClass: organizationalUnit
+ou: Groups
+
+dn: cn=jan,ou=Groups,dc=asu,dc=ia,dc=pw,dc=edu,dc=pl
+objectClass: posixGroup
+cn: jan
+gidNumber: 5000
+
+dn: uid=jan,ou=People,dc=asu,dc=ia,dc=pw,dc=edu,dc=pl
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: jan
+cn: jan
+sn: jan
+uidNumber: 5000
+gidNumber: 5000
+homeDirectory: /home/users/jan
+loginShell: /bin/bash

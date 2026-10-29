@@ -1,0 +1,35 @@
+cw1 host1
+
+pobranie
+dhclient eth1
+cd /root
+U=https://macius714.github.io/cw1/host1
+curl -O $U/interfaces
+curl -O $U/hosts
+curl -O $U/vsftpd.conf
+apt-get install traceroute vsftpd
+
+etap 1 (po routerze)
+ip addr add 192.168.1.10/24 dev eth0
+ip link set eth0 up
+ip route add 192.168.2.0/24 via 192.168.1.1
+ping -c3 192.168.2.20
+traceroute -n 192.168.2.20   (pierwszy skok 192.168.1.1)
+ping -c3 194.29.160.35
+ping -c3 mion.elka.pw.edu.pl
+
+etap 2
+cp interfaces /etc/network/
+cp hosts /etc/
+reboot
+po restarcie:
+ip a
+ip route
+ping -c3 host2
+traceroute host2
+
+etap 3
+cp vsftpd.conf /etc/
+service vsftpd restart
+po wyslaniu pliku z host2:
+ls -l /home/user

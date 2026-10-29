@@ -1,0 +1,11 @@
+zone "asu.ia.pw.edu.pl" {
+	type slave;
+	file "/var/cache/bind/db.asu";
+	masters { 192.168.4.10; };
+};
+
+zone "4.168.192.in-addr.arpa" {
+	type slave;
+	file "/var/cache/bind/db.rev";
+	masters { 192.168.4.10; };
+};

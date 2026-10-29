@@ -1,0 +1,37 @@
+cw3 host1
+
+pobranie
+cd /root
+U=https://macius714.github.io/cw3/host1
+curl -O $U/fstab
+apt-get install cups cups-pdf elinks
+
+etap 1 (po dodaniu folderu cups w virtualbox)
+mkdir /CUPS
+mount -t vboxsf -o rw,dmode=777,fmode=666 cups /CUPS
+cat fstab >> /etc/fstab
+su anonymous -s /bin/sh -c "touch /CUPS/test"
+ls -l /CUPS
+jak nie ma anonymous: useradd -M anonymous
+jak mount nie dziala: modprobe vboxsf
+
+etap 2
+nano /etc/cups/cups-pdf.conf
+  #Out ${HOME}/PDF  ->  Out /CUPS
+  #AnonDirName /var/spool/cups-pdf/ANONYMOUS  ->  AnonDirName /CUPS
+ln -s /etc/apparmor.d/usr.sbin.cupsd /etc/apparmor.d/disable/
+apparmor_parser -R /etc/apparmor.d/usr.sbin.cupsd
+service cups restart
+elinks http://localhost:631
+  Printers -> PDF -> Maintenance: Print Test Page -> Go
+  login root, haslo root
+  q wyjscie
+ls -l /CUPS   (ma byc .pdf)
+
+etap 3
+elinks http://localhost:631
+  Administration -> zaznaczyc Share printers connected to this system -> Change Settings
+  Printers -> PDF -> Administration: Modify Printer -> Go
+  Continue -> Continue -> zaznaczyc Share This Printer -> Continue -> Modify Printer
+  q wyjscie
+service cups restart

@@ -1,0 +1,36 @@
+cw2 host1
+
+sprawdzic ip -4 a na obu: host1 192.168.4.10, host2 192.168.4.20
+jak inne -> zmienic w named.conf.local, db.asu, db.rev, exports
+w db.rev ostatnia liczba adresu (10 i 20)
+
+pobranie
+cd /root
+U=https://macius714.github.io/cw2/host1
+curl -O $U/named.conf.local
+curl -O $U/db.asu
+curl -O $U/db.rev
+curl -O $U/exports
+apt-get install bind9 dnsutils nfs-kernel-server
+
+etap 1
+cp named.conf.local db.asu db.rev /etc/bind/
+named-checkconf
+named-checkzone asu.ia.pw.edu.pl /etc/bind/db.asu
+named-checkzone 4.168.192.in-addr.arpa /etc/bind/db.rev
+service bind9 restart
+nslookup host1.asu.ia.pw.edu.pl localhost
+nslookup 192.168.4.20 localhost
+
+etap 2
+nic, robione na host2
+test slave: service bind9 stop
+na host2 nslookup host1 localhost ma dzialac
+service bind9 start
+
+etap 3
+mkdir /pub
+cat exports >> /etc/exports
+exportfs -ra
+service nfs-kernel-server restart
+exportfs -v

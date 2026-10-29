@@ -1,0 +1,26 @@
+cw1 router
+
+pobranie
+dhclient eth2
+cd /root
+U=https://macius714.github.io/cw1/router
+curl -O $U/interfaces
+curl -O $U/hosts
+
+etap 1
+ip addr add 192.168.1.1/24 dev eth0
+ip addr add 192.168.2.1/24 dev eth1
+ip link set eth0 up
+ip link set eth1 up
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+etap 2
+cp interfaces /etc/network/
+cp hosts /etc/
+nano /etc/sysctl.conf
+  usunac # przed net.ipv4.ip_forward=1
+reboot
+po restarcie:
+ip a
+ip route
+cat /proc/sys/net/ipv4/ip_forward   (ma byc 1)

@@ -1,0 +1,1 @@
+cups /CUPS vboxsf rw,dmode=777,fmode=666,nofail 0 0
