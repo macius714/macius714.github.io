@@ -1,0 +1,68 @@
+cw8 server
+
+hostname na maszynach: server, host1, host2  (sprawdzic: hostname)
+jak inne -> zmienic w hosts.cfg (xymon) i nagios-asu.cfg
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw8/server
+curl -O $U/hosts.cfg
+curl -O $U/munin-hosts.conf
+curl -O $U/nagios-asu.cfg
+curl -O $U/nrpe-asu.cfg
+apt-get install xymon xymon-client munin munin-node apache2
+
+etap 1
+nano /etc/default/xymon-client
+  XYMONSERVERS="192.168.1.1"
+  CLIENTHOSTNAME="server"
+usermod -a -G adm xymon
+cp hosts.cfg /etc/xymon/hosts.cfg
+nano /etc/xymon/client-local.cfg
+  /var/log/messages -> /var/log/syslog  (sekcja [linux], i [debian]/[ubuntu] jak sa)
+ls /etc/apache2/conf-available | grep xymon
+  jest: a2enconf xymon
+  nie ma: ls /etc/xymon | grep apache, potem ln -s /etc/xymon/<ten plik> /etc/apache2/conf-enabled/xymon.conf
+nano /etc/apache2/conf-enabled/xymon.conf
+  Order ... / Allow from ...  ->  Require all granted
+a2enmod cgi
+service xymon-client restart
+service xymon restart
+service apache2 restart
+przegladarka na fizycznej: http://localhost:8000/xymon/
+
+etap 2
+echo "host_name server.asu" >> /etc/munin/munin-node.conf
+service munin-node restart
+nano /etc/munin/munin.conf
+  [localhost.localdomain] i dwie linie pod nim -> dac # na poczatku
+cp munin-hosts.conf /etc/munin/munin-conf.d/
+cat /etc/cron.d/munin   (ma byc */5 ... munin-cron)
+nano /etc/munin/apache24.conf
+  Require local  ->  Require all granted  (wszystkie)
+ls /etc/apache2/conf-enabled | grep munin
+  nie ma: ln -s /etc/munin/apache24.conf /etc/apache2/conf-enabled/munin.conf
+service apache2 restart
+su - munin -s /bin/bash -c munin-cron   (zeby nie czekac 5 min)
+przegladarka: http://localhost:8000/munin/
+
+etap 3
+grep cfg_dir /etc/nagios3/nagios.cfg   (katalog na pliki, np. /etc/nagios3/conf.d)
+cp nagios-asu.cfg /etc/nagios3/conf.d/
+cp nrpe-asu.cfg /etc/nagios/nrpe.d/
+nano /etc/nagios/nrpe.cfg
+  allowed_hosts=127.0.0.1,192.168.1.1
+service nagios-nrpe-server restart
+htpasswd -c /etc/nagios3/htpasswd.users nagiosadmin
+nano /etc/nagios3/apache2.conf
+  usunac linie Order ... i Allow ..., zostawic Require valid-user
+ls /etc/apache2/conf-enabled | grep nagios
+  nie ma: a2enconf nagios3
+nagios3 -v /etc/nagios3/nagios.cfg
+service nagios3 restart
+service apache2 restart
+przegladarka: http://localhost:8000/nagios3/  login nagiosadmin
+
+etap 4
+na host1: poweroff
+patrzec kiedy host1 zmieni stan w xymon, munin, nagios3

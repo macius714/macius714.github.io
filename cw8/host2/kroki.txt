@@ -1,0 +1,27 @@
+cw8 host2
+
+hostname ma byc host2 (sprawdzic: hostname)
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw8/host2
+curl -O $U/nrpe-asu.cfg
+apt-get install xymon-client munin-node
+
+etap 1
+nano /etc/default/xymon-client
+  XYMONSERVERS="192.168.1.1"
+  CLIENTHOSTNAME="host2"
+usermod -a -G adm xymon
+service xymon-client restart
+
+etap 2
+echo "host_name host2.asu" >> /etc/munin/munin-node.conf
+echo 'allow ^192\.168\.1\.1$' >> /etc/munin/munin-node.conf
+service munin-node restart
+
+etap 3
+cp nrpe-asu.cfg /etc/nagios/nrpe.d/
+nano /etc/nagios/nrpe.cfg
+  allowed_hosts=127.0.0.1,192.168.1.1
+service nagios-nrpe-server restart

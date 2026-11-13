@@ -1,0 +1,34 @@
+cw7 apache
+
+slapcat | grep dn  -> baza ldap. jak inna niz dc=asu,dc=ia,dc=pw,dc=edu,dc=pl -> zmienic w asu3.conf
+cat /var/www/index.shtml  -> zobaczyc jakich zmiennych uzywa tabelka
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw7/apache
+curl -O $U/asu1.conf
+curl -O $U/asu2.conf
+curl -O $U/asu3.conf
+
+etap 1
+mkdir /var/www/asu1 /var/www/asu2 /var/www/asu3
+cp /var/www/index.shtml /var/www/asu1/
+cp /var/www/index.shtml /var/www/asu2/
+cp /var/www/index.shtml /var/www/asu3/
+htpasswd -cb /var/www/htpasswd ada ada
+htpasswd -b /var/www/htpasswd igor igor
+cp asu1.conf asu2.conf asu3.conf /etc/apache2/sites-available/
+a2enmod include ldap authnz_ldap
+a2ensite asu1 asu2 asu3
+apache2ctl configtest
+service apache2 restart
+
+test
+curl -H "Host: asu1.asu.ia.pw.edu.pl" http://localhost/
+curl -H "Host: asu2.asu.ia.pw.edu.pl" http://localhost/              (401)
+curl -u ada:ada -H "Host: asu2.asu.ia.pw.edu.pl" http://localhost/
+curl -u jan:jan -H "Host: asu3.asu.ia.pw.edu.pl" http://localhost/
+jak brak curl: apt-get install curl
+
+jak puste pola w tabelce: zmienne z index.shtml (#echo var="X") dopisac w asuN.conf jako SetEnv X wartosc
+jak asu3 daje 500: tail /var/log/apache2/error.log

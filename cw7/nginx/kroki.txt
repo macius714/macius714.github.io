@@ -1,0 +1,26 @@
+cw7 nginx
+
+ls /var/www/index.shtml  -> jak brak, skopiowac z maszyny apache
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw7/nginx
+curl -O $U/asu4
+curl -O $U/asu5
+
+etap 2
+mkdir /var/www/asu4 /var/www/asu5
+cp /var/www/index.shtml /var/www/asu4/
+cp /var/www/index.shtml /var/www/asu5/
+echo "ada:$(openssl passwd -apr1 ada)" > /var/www/htpasswd
+echo "igor:$(openssl passwd -apr1 igor)" >> /var/www/htpasswd
+cp asu4 asu5 /etc/nginx/sites-available/
+ln -s /etc/nginx/sites-available/asu4 /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/asu5 /etc/nginx/sites-enabled/
+nginx -t
+service nginx restart
+
+test
+curl -H "Host: asu4.asu.ia.pw.edu.pl" http://localhost/
+curl -H "Host: asu5.asu.ia.pw.edu.pl" http://localhost/              (401)
+curl -u ada:ada -H "Host: asu5.asu.ia.pw.edu.pl" http://localhost/

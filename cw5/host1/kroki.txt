@@ -1,0 +1,56 @@
+cw5 host1
+
+ip -4 a na obu - host2 musi byc w 192.168.0.0/16 (mynetworks), jak inny -> zmienic w postconf
+host1.asu.ia.pw.edu.pl musi sie rozwiazywac: ping host1.asu.ia.pw.edu.pl
+jak nie -> w pinerc-ewa i pinerc-jan zamienic host1.asu.ia.pw.edu.pl na ip host1
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw5/host1
+curl -O $U/local.conf
+curl -O $U/aliases
+curl -O $U/pinerc-ewa
+curl -O $U/pinerc-jan
+apt-get install postfix dovecot-imapd alpine telnet
+  postfix: Internet Site, nazwa: asu.ia.pw.edu.pl
+
+etap 1
+postconf -e "myhostname = host1.asu.ia.pw.edu.pl"
+postconf -e "mydomain = asu.ia.pw.edu.pl"
+postconf -e "myorigin = asu.ia.pw.edu.pl"
+postconf -e "mydestination = host1.asu.ia.pw.edu.pl, asu.ia.pw.edu.pl, localhost"
+postconf -e "mynetworks = 127.0.0.0/8 192.168.0.0/16"
+postconf -e "inet_interfaces = all"
+service postfix restart
+postconf -n
+cp local.conf /etc/dovecot/
+service dovecot restart
+echo "Subject: test1" | sendmail ewa@asu.ia.pw.edu.pl
+echo "Subject: test2" | sendmail jan@host1.asu.ia.pw.edu.pl
+tail /var/log/mail.log   (status=sent)
+ls -l /var/mail
+telnet localhost 143
+  a login ewa ewa
+  b select inbox
+  c logout
+
+etap 2
+cat aliases >> /etc/aliases
+newaliases
+echo "Subject: test3" | sendmail e.nowak@asu.ia.pw.edu.pl
+echo "Subject: test4" | sendmail j.kowalski@asu.ia.pw.edu.pl
+tail /var/log/mail.log   (delivered to mailbox, ewa i jan)
+
+etap 3
+cp pinerc-ewa /home/ewa/.pinerc
+cp pinerc-jan /home/jan/.pinerc
+touch /home/ewa/.pine-passfile /home/jan/.pine-passfile
+chown ewa:ewa /home/ewa/.pinerc /home/ewa/.pine-passfile
+chown jan:jan /home/jan/.pinerc /home/jan/.pine-passfile
+su - ewa
+alpine
+  haslo ewa, pytanie o zapisanie hasla: y
+  wyslac maila do j.kowalski@asu.ia.pw.edu.pl
+  sprawdzic INBOX i folder sent-mail
+exit
+to samo dla jan

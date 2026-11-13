@@ -1,0 +1,5 @@
+cw6 host1
+
+etap 1 testy (po firewall)
+elinks studia.elka.pw.edu.pl         dziala
+ssh login@mion.elka.pw.edu.pl        dziala (login = swoj login studenta)

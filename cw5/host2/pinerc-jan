@@ -1,0 +1,6 @@
+personal-name=jan
+user-domain=asu.ia.pw.edu.pl
+smtp-server=host1.asu.ia.pw.edu.pl/novalidate-cert
+inbox-path={host1.asu.ia.pw.edu.pl/novalidate-cert/user=jan}INBOX
+folder-collections={host1.asu.ia.pw.edu.pl/novalidate-cert/user=jan}[]
+default-fcc={host1.asu.ia.pw.edu.pl/novalidate-cert/user=jan}sent-mail

@@ -1,0 +1,9 @@
+server {
+	listen 80;
+	server_name asu5.asu.ia.pw.edu.pl;
+	root /var/www/asu5;
+	index index.shtml;
+	ssi on;
+	auth_basic "asu5";
+	auth_basic_user_file /var/www/htpasswd;
+}

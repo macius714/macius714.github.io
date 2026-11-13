@@ -1,0 +1,7 @@
+server {
+	listen 80;
+	server_name asu4.asu.ia.pw.edu.pl;
+	root /var/www/asu4;
+	index index.shtml;
+	ssi on;
+}

@@ -1,0 +1,6 @@
+personal-name=ewa
+user-domain=asu.ia.pw.edu.pl
+smtp-server=host1.asu.ia.pw.edu.pl/novalidate-cert
+inbox-path={host1.asu.ia.pw.edu.pl/novalidate-cert/user=ewa}INBOX
+folder-collections={host1.asu.ia.pw.edu.pl/novalidate-cert/user=ewa}[]
+default-fcc={host1.asu.ia.pw.edu.pl/novalidate-cert/user=ewa}sent-mail

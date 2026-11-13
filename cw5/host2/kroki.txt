@@ -1,0 +1,28 @@
+cw5 host2
+
+host1.asu.ia.pw.edu.pl musi sie rozwiazywac: ping host1.asu.ia.pw.edu.pl
+jak nie -> w pinerc-ewa i pinerc-jan zamienic host1.asu.ia.pw.edu.pl na ip host1
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw5/host2
+curl -O $U/pinerc-ewa
+curl -O $U/pinerc-jan
+apt-get install alpine telnet
+
+etap 3 (po host1 etap 1 i 2)
+telnet host1.asu.ia.pw.edu.pl 143
+  a login ewa ewa
+  b logout
+cp pinerc-ewa /home/ewa/.pinerc
+cp pinerc-jan /home/jan/.pinerc
+touch /home/ewa/.pine-passfile /home/jan/.pine-passfile
+chown ewa:ewa /home/ewa/.pinerc /home/ewa/.pine-passfile
+chown jan:jan /home/jan/.pinerc /home/jan/.pine-passfile
+su - ewa
+alpine
+  haslo ewa, pytanie o zapisanie hasla: y
+  INBOX i sent-mail maja byc takie same jak na host1
+  wyslac maila do j.kowalski@asu.ia.pw.edu.pl
+exit
+to samo dla jan

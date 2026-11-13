@@ -1,0 +1,22 @@
+cw6 firewall
+
+ip -4 a: eth0 192.168.1.1, eth1 192.168.2.10, eth2 dhcp
+jak inne nazwy interfejsow -> zmienic w rules.v4
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw6/firewall
+curl -O $U/rules.v4
+
+etap 1
+cat /proc/sys/net/ipv4/ip_forward   (ma byc 1)
+jak 0: nano /etc/sysctl.conf -> usunac # przed net.ipv4.ip_forward=1, potem sysctl -p
+iptables-restore < rules.v4
+iptables -L -n -v
+iptables -t nat -L -n -v
+iptables-save > /etc/iptables/rules.v4
+testy z client, host1, host2
+reboot
+po restarcie: iptables -t nat -L -n   (reguly maja byc)
+
+od teraz ssh na firewall z zewnatrz loguje na host2

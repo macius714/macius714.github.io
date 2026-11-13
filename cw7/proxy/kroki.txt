@@ -1,0 +1,29 @@
+cw7 proxy
+
+getent hosts asu1.asu.ia.pw.edu.pl   (i asu2..asu5) - maja zwracac adresy
+jak nie -> dopisac do /etc/hosts: ip_apache asu1.asu.ia.pw.edu.pl asu2... asu3..., ip_nginx asu4... asu5...
+
+pobranie
+cd /root
+U=https://raw.githubusercontent.com/macius714/macius714.github.io/main/cw7/proxy
+curl -O $U/000-default.conf
+curl -O $U/default
+
+etap 3
+nano /etc/nginx/sites-enabled/default
+  listen 80 default_server;       ->  listen 81 default_server;
+  listen [::]:80 default_server;  ->  listen [::]:81 default_server;
+service nginx restart
+cp 000-default.conf /etc/apache2/sites-available/
+a2enmod proxy proxy_http
+apache2ctl configtest
+service apache2 restart
+curl http://localhost/asu1/
+przegladarka na fizycznej: http://localhost:8000/asu1/ ... /asu5/
+
+etap 4
+cp default /etc/nginx/sites-available/default
+nginx -t
+service nginx restart
+curl http://localhost:81/asu1/
+przegladarka na fizycznej: http://localhost:8010/asu1/ ... /asu5/

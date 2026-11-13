@@ -1,0 +1,8 @@
+cw6 client
+
+etap 1 testy (po firewall)
+elinks firewall.                     dziala (strona z host1)
+ssh user@firewall                    dziala (logowanie na host2, hostname)
+elinks 192.168.1.10                  nie dziala
+ssh user@192.168.1.20                nie dziala
+dig @firewall mion.elka.pw.edu.pl    nie dziala

@@ -1,0 +1,10 @@
+server {
+	listen 81 default_server;
+	listen [::]:81 default_server;
+	root /var/www/html;
+	location /asu1/ { proxy_pass http://asu1.asu.ia.pw.edu.pl/; }
+	location /asu2/ { proxy_pass http://asu2.asu.ia.pw.edu.pl/; }
+	location /asu3/ { proxy_pass http://asu3.asu.ia.pw.edu.pl/; }
+	location /asu4/ { proxy_pass http://asu4.asu.ia.pw.edu.pl/; }
+	location /asu5/ { proxy_pass http://asu5.asu.ia.pw.edu.pl/; }
+}
